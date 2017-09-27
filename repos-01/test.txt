@@ -6,6 +6,6 @@ git change on dev branch 0
 git change on dev branch 1
 git change on dev branch 2
 git change on dev branch 3
-git change on master branch 4
+git change on dev branch 4
 hello and world
 
