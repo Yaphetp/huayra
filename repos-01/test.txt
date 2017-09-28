@@ -13,4 +13,6 @@ new feature
 
 feature from feature branch
 
+feature will be merge into master
+
 
