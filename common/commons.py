@@ -59,7 +59,7 @@ def login():
     dr.find_element_by_id('com.talk51.dasheng:id/btn_login_regi').click()
     time.sleep(2)
     dr.find_element_by_id("com.talk51.dasheng:id/et_email").send_keys('15811045057')
-    dr.find_element_by_id('com.talk51.dasheng:id/et_password').send_keys('000000')
+    dr.find_element_by_id('com.talk51.dasheng:id/et_password').send_keys('111111')
     dr.find_element_by_id('com.talk51.dasheng:id/btn_login').click()
     time.sleep(10)
 
