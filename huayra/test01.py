@@ -1,25 +1,17 @@
+# coding=utf-8
 import unittest
-import time
-
-class myDemo():
 
 
-    def mytest_01(self):
-        self.a= 1
-        print 'it`s mytest01 the value is {}'.format(self.a)
-        time.sleep(1)
+class Test1704(unittest.TestCase):
+
+    def setUp(self):
+        self.b = 1
+
+    def test001(self):
+        print 'excute test001.'
+        print self.b
 
 
-    def mytest_02(self):
-        print 'it`s mytest02 the value is {}'.format(self.a)
-        time.sleep(1)
 
-
-    def mytest_03(self):
-        print 'it`s mytest03 the value is {}'.format(self.a)
-        time.sleep(1)
-
-mydemo= myDemo()
-mydemo.mytest_01()
-mydemo.mytest_02()
-mydemo.mytest_03()
+def suit01():
+    suit =unittest.TestLoader().loadTestsFromTestCase(Test1704)
