@@ -103,5 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 huayra
-QA
+QA.txt
+QA2.py
 work diary
