@@ -102,6 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-.huayra
-.QA
-.work diary
+huayra
+QA
+work diary
