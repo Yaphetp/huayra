@@ -4,8 +4,6 @@ import re
 import os
 import time
 from appium import webdriver
-
-MY_DRIVER = None
 # os.system('adb uninstall io.appium.settings')
 # time.sleep(2)
 # os.system('adb uninstall io.appium.unlock')
@@ -17,7 +15,7 @@ device_version = ''.join(re.findall('\d.\d', key3))
 app_name = ''.join(re.findall('com\.talk51\.dasheng', key4))
 """
 # pc端app地址
-appLocation = os.path.abspath(r'E:\wangping\app\src\apps\release.apk')
+# appLocation = os.path.abspath(r'E:\wangping\app\src\apps\release.apk')
 
 # 获取设备ID
 readDeviceid = os.popen('adb devices', 'r', -1).readlines()
@@ -41,21 +39,23 @@ deviceVersion = deviceAndroidVersion.strip()
 
 # 自动获取连接到pc的当前设备的必要设备信息
 desired_caps = {
-    'app': appLocation,
+    # 'app': appLocation,
     'platformVersion': deviceVersion,
     'deviceName': deviceId,
     # 'deviceName': 'WTKDU16A22003533',
-    'appPackage': 'com.talk51.dasheng',
+    'appPackage': 'com.talk51.kid',  # 青少儿，成人是'com.talk51.dasheng'
     'platformName': 'Android',
-    'appActivity': '.activity.SplashActivity',
+    # 'appActivity': '.activity.SplashActivity', # 老包的activity
+    'appActivity': '.core.app.SplashActivity',
     # 'automationName': 'Uiautomator2',
     'automationName': 'appium',
     # 'appWaitActivity': '.activity.dailyTask.user_guide.GuideActivity',
     'noReset': True,
+    'recreateChromeDriverSessions': True
     # 设置收到下一条命令的超时时间, 超时appium会自动关闭session, 默认60秒
-    # 'newCommandTimeout': '30',
-    'unicodeKeyboard': True,
-    'resetKeyboard': True
+    # 'newCommandTimeout': '60',
+    # 'unicodeKeyboard': True,
+    # 'resetKeyboard': True
 
 }
 
@@ -63,18 +63,17 @@ url = 'http://127.0.0.1:4723/wd/hub'
 
 
 def get_driver():
-    # 定义全局变量的目的，给quit_driver（）使用
-    global MY_DRIVER
-    MY_DRIVER = webdriver.Remote(url, desired_caps)
-    MY_DRIVER.implicitly_wait(5)
-    return MY_DRIVER
+    driver = webdriver.Remote(url, desired_caps)
+    driver.implicitly_wait(30)
+    return driver
 
 
-def used_driver():
-    global MY_DRIVER
-    return MY_DRIVER
+# def used_driver():
+#     global my_driver
+#     return my_driver
 
-
-def quit_driver():
-    global MY_DRIVER
-    MY_DRIVER.quit()
+#
+#
+# def quit_driver():
+#     global MY_DRIVER
+#     MY_DRIVER.quit()

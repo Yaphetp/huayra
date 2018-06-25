@@ -6,9 +6,9 @@ import time
 import os
 from common.appiumDriver import used_driver
 # from common.appiumDriver import get_driver
-from common.commons import defined_tap
+from common.commons import defined_tap, find_toast, kaka, remove_kaka
+from common.constant import screenshot_url, locate
 from selenium.common.exceptions import NoSuchElementException
-from commons import find_toast, kaka, remove_kaka
 
 
 class UserCenter(unittest.TestCase):
@@ -18,7 +18,7 @@ class UserCenter(unittest.TestCase):
         # cls.dr = get_driver()
 
     def test_userPic(self):
-        self.dr.find_element_by_id('com.talk51.dasheng:id/tv_account').click()
+        locate(self.dr, id_a).click()
         self.dr.find_element_by_id('com.talk51.dasheng:id/iv_arrow_right').click()
         self.dr.find_element_by_id('com.talk51.dasheng:id/user_img').click()
         # 从相册中选取
@@ -31,6 +31,7 @@ class UserCenter(unittest.TestCase):
             self.dr.find_element_by_id('com.android.gallery3d:id/head_select_right').click()
             # self.dr.pinch(self.dr.find_element_by_class_name('android.widget.RelativeLayout'), 200, 200)
             self.dr.find_element_by_id('com.android.gallery3d:id/head_select_right').click()
+            time.sleep(0.5)
             find_toast(self, u'设置成功')
             """
             截图、删除图片 
@@ -38,8 +39,8 @@ class UserCenter(unittest.TestCase):
             # self.dr.save_screenshot('test01.png')
             #  当前目录，test_case目录
             # os.remove(r'E:\wangping\app\src\result\uploadPic.png')
-            remove_kaka(r'E:\wangping\app\src\result', 'uploadPic')
-            kaka('uploadPic')
+            remove_kaka(screenshot_url, 'uploadPic')
+            kaka(screenshot_url, 'uploadPic')
         except NoSuchElementException:
             print u'本机选择照片，华为mate8 6.0系统测试通过'
 

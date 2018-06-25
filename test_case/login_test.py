@@ -11,8 +11,11 @@ class TestLogin(unittest.TestCase):
     #     cls.dr = used_driver()
 
     def test_login(self):
-        print 'if app had logged in.'
-        if if_unlogin():  # 判断是否未登录
+        """
+        1、判断是否未登录，若未登录，执行登录；
+        2、若已登录，则退出登录（首先关闭各种弹窗），重新登录
+        """
+        if if_unlogin():
             login()
         else:
             self.test_otherPage()

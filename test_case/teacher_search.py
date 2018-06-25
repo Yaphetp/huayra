@@ -6,7 +6,7 @@ import unittest
 from common.appiumDriver import used_driver
 # from common.appiumDriver import get_driver
 from common.commons import defined_tap
-from constant import button_1v1_yueke
+from common.constant import locate
 from variable import t_name
 from selenium.common.exceptions import NoSuchElementException
 
@@ -19,7 +19,7 @@ class SearchTeacher(unittest.TestCase):
 
     def test_search_1v1teacher(self):
         time.sleep(2)
-        self.dr.find_element_by_id(button_1v1_yueke).click()
+        locate(self.dr).yueke_find_by_id.click()
         self.dr.find_element_by_id('com.talk51.dasheng:id/tv_filter').click()
         self.dr.find_element_by_id('com.talk51.dasheng:id/edittxt_tea_name').click()
         for name in t_name:

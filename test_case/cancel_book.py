@@ -5,8 +5,8 @@ from common.appiumDriver import used_driver
 # from common.appiumDriver import get_driver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
-from commons import swipe_up
-from commons import CancelBookError
+from common.commons import swipe_up, CancelBookError
+from common.constant import locate
 import time
 
 
@@ -20,7 +20,7 @@ class BookCancel(unittest.TestCase):
         cls.dr = used_driver()
 
     def cancel_1v1class_book(self):
-        self.dr.find_element_by_id('com.talk51.dasheng:id/tv_course').click()
+        locate(self.dr).shouye_find_by_Id.click()
         try:
             while self.dr.find_element_by_id('com.talk51.dasheng:id/btn_enter_class').text == u'预习':
                 # if self.dr.find_elements_by_id('com.talk51.dasheng:id/tv_course_date')[0].text[:10] == u'12月07日':
@@ -36,7 +36,7 @@ class BookCancel(unittest.TestCase):
             print u'无可取消课程'
 
     def cancel_miniclass_book(self):
-        self.dr.find_element_by_id('com.talk51.dasheng:id/tv_course').click()
+        locate(self.dr).shouye_find_by_Id.click()
         try:
             while self.dr.find_element_by_id('com.talk51.dasheng:id/tv_class_type').text == u'小班课':
                 self.dr.find_element_by_id('com.talk51.dasheng:id/tv_class_type').click()

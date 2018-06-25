@@ -3,13 +3,14 @@
 
 import time
 import unittest
-from common.appiumDriver import used_driver
-# from common.appiumDriver import get_driver
+# from common.appiumDriver import used_driver
+from common.appiumDriver import get_driver
 from common.commons import defined_tap, random_tap, if_is_booked
 from selenium.common.exceptions import NoSuchElementException
-from commons import swipe_up, swipe_left, swipe_down
+from common.commons import swipe_up, swipe_left, swipe_down
 from cancel_book import BookCancel
 from common import variable
+from common.constant import locate
 # import sys
 # reload(sys)
 # sys.setdefaultencoding('utf-8')  # 小班课约课使用，部分中文字段截取
@@ -18,12 +19,12 @@ from common import variable
 class Book(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.dr = used_driver()
-        # cls.dr = get_driver()
+        # cls.dr = used_driver()
+        cls.dr = get_driver()
 
     def test_single_book(self):
         try:
-            self.dr.find_element_by_id('com.talk51.dasheng:id/tv_bespoke').click()
+            locate(self.dr).yueke_find_by_id.click()
             time.sleep(5)
             self.dr.find_element_by_id('com.talk51.dasheng:id/rl_seach_time').click()
             time.sleep(2)
@@ -47,7 +48,7 @@ class Book(unittest.TestCase):
             print e
 
     def test_batch_book(self):
-        self.dr.find_element_by_id('com.talk51.dasheng:id/tv_bespoke').click()
+        yueke_find_by_id.click()
         time.sleep(5)
         self.dr.find_element_by_id('com.talk51.dasheng:id/rl_seach_time').click()
         time.sleep(2)
@@ -146,7 +147,7 @@ class Book(unittest.TestCase):
                 print e
 
     def test_mini_class_book(self):
-        self.dr.find_element_by_id('com.talk51.dasheng:id/tv_bespoke').click()
+        locate(self.dr).yueke_find_by_id.click()
         self.dr.find_element_by_name('小班课').click()
         print 'start'
         print self.dr.find_elements_by_id('com.talk51.dasheng:id/tv_time')[0].text[:6]
