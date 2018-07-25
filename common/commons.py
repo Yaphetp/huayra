@@ -13,28 +13,49 @@ import os
 import cv2
 from matplotlib import pyplot
 import numpy as np
+import logging
 
 appium_id = 'appium_id'
+appium_ids = 'appium_ids'
 appium_name = 'appium_name'
+appium_nameLike = 'appium_nameLike'
+appium_nameLikeIndex = 'appium_nameLikeIndex'
 appium_className = 'appium_className'
 appium_xpath = 'appium_xpath'
 appium_accessibility = 'appium_accessibility'
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s >>> %(levelname)s >>> %(message)s')
+logger = logging.getLogger(__name__)
 
-class CancelBookError(Exception):
-    pass
 
-
-def get_element(driver, location, value):
+def get_element(driver, location, value, *index):
     # 通过id定位
     if location == appium_id:
         element = driver.find_element_by_id(value)
+        return element
+    # 通过id's 定位
+    elif location == appium_ids:
+        element = driver.find_elements_by_id(value)[index[0]]
         return element
     # 通过name定位
     elif location == appium_name:  # 新版本通过name定位，只能通过如下方法
         # 如下两种方式都可以实现
         # element = driver.find_element_by_android_uiautomator('text(\"'+value+'\")')
         element = driver.find_element_by_android_uiautomator('new UiSelector().text("'+value+'")')
+        return element
+
+    # 通过name模糊匹配
+    elif location == appium_nameLike:  # 新版本通过name定位，只能通过如下方法
+        # 如下两种方式都可以实现
+        # element = driver.find_element_by_android_uiautomator('text(\"'+value+'\")')
+        element = driver.find_element_by_android_uiautomator('new UiSelector().textContains("'+value+'")')
+        return element
+
+    # 通过name模糊匹配,外加index定位
+    elif location == appium_nameLikeIndex:  # 新版本通过name定位，只能通过如下方法
+        # 如下两种方式都可以实现
+        # element = driver.find_element_by_android_uiautomator('text(\"'+value+'\")')
+        element = driver.find_elements_by_android_uiautomator('new UiSelector().textContains("'+value+'")')[index[0]]
         return element
     # 通过classname定位
     elif location == appium_className:
@@ -51,13 +72,21 @@ def get_element(driver, location, value):
         return element
 
 
-def if_element_exist(driver, location, value):
+def element_exist(driver, location, value, *args):
     try:
         if location == appium_id:
             get_element(driver, location, value)
             return True
 
+        elif location == appium_ids:
+            get_element(driver, location, value, args)
+            return True
+
         elif location == appium_name:
+            get_element(driver, location, value)
+            return True
+
+        elif location == appium_nameLike:
             get_element(driver, location, value)
             return True
 
@@ -73,9 +102,8 @@ def if_element_exist(driver, location, value):
             get_element(driver, location, value)
             return True
     except NoSuchElementException:
-        print 'No such element found.'
+        # print 'No such element found.'
         return False
-
 
 def if_unlogin():
     dr = used_driver()
@@ -167,28 +195,25 @@ def find_toast(self, message, timeout=10, poll=0.01):
         return False
 
 
-def get_size():
-    dr = used_driver()
-    x = dr.get_window_size()['width']
-    y = dr.get_window_size()['height']
-    print 'width is :', x, 'height is:', y
+def get_size(driver):
+    x = driver.get_window_size()['width']
+    y = driver.get_window_size()['height']
+    # print 'width is :', x, 'height is:', y
     # width = 1080, height = 1794
     return x, y
 
 
 # 向上滑
-def swipe_up():
-    dr = used_driver()
-    s = get_size()
+def swipe_up(driver):
+    s = get_size(driver)
     x1 = int(s[0] * 0.5)
     y1 = int(s[1] * 0.5)
     y2 = y1 - y1 * 0.75
-    dr.swipe(x1, y1, x1, y2)
+    driver.swipe(x1, y1, x1, y2)
 
 
 # 向下滑
 def swipe_down():
-    dr = used_driver()
     s = get_size()
     x1 = int(s[0] * 0.5)
     y1 = int(s[1] * 0.5)
@@ -487,6 +512,26 @@ def hanming_distance(bin_list1, bin_list2):
         if bin_list1[hm_index] != bin_list2[hm_index]:
             hm_value = hm_value + 1
     return u'总位数为{}, 有{}位不同'.format(len(bin_list1), hm_value)  # 总位数，以及相异位数
+
+# 修改课程时，判断青少or成人，然后修改青少或者成人的课程
+def get_nameOfLessonType(driver):
+    name = u'经典英语青少'
+    try:
+        if element_exist(driver, appium_nameLike, name):
+            return name
+        else:
+            name = u'经典英语'
+            return name
+    except NoSuchElementException:
+        pass
+
+def my_logging():
+    # 设置默认的level为DEBUG
+    # 设置log的格式
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="[%(asctime)s] %(name)s:%(levelname)s: %(message)s"
+    )
 
 if __name__ == '__main__':
     result = classify_aHash('price_smallPic1', 'price_smallPic2')

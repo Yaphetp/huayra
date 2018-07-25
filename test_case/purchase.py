@@ -8,6 +8,7 @@ from common.commons import if_element_exist, get_element, appium_id, \
     hist_compare, split_hist_compare, classify_aHash, classify_pHash
 from po.purchase_page import *
 from common.common_elements import zh_value
+import base64
 from selenium.common.exceptions import NoSuchElementException
 from PIL import Image
 import os
@@ -34,60 +35,51 @@ class Purchase(unittest.TestCase):
             ele = get_element(self.dr, appium_id, xczs_id)
             ele.click()
 
-        ele = get_element(self.dr, appium_id, gmkc_id)
+        ele = get_element(self.dr, appium_id, gmkc_id)  # 点击‘购买课程’按钮
         ele.click()
         time.sleep(3)
-        print self.dr.contexts  # 获取dirver类型，原生+H5的driver（将H5的driver给下面的值）
-        # self.dr.switch_to.context('WEBVIEW_chrome')
-        # ele = get_element(self.dr, appium_accessibility, cktc_accessibility)
-        # 因为新安装app后，始终打印contexts是native，故无法做上下文的切换，直接使用native的xpath定位，意外之喜竟然成功。
-        ele = get_element(self.dr, appium_xpath, qhtc_xpath)  # i can`t belive it.it was sucessful just now
-        ele.click()
         print self.dr.contexts
-        # 这里使用accessibility不太适用，因为套餐随时可能变化
-        # ele = get_element(self.dr, appium_accessibility, tcxl_accessibility)
+        self.dr.switch_to.context('WEBVIEW_com.talk51.kid')
+        ele = get_element(self.dr, appium_xpath, qhxx_xpath)
+        ele.click()  # 点击强化套餐，进入详情页
+        time.sleep(2)
+        ele = get_element(self.dr, appium_xpath, tcxl_xpath)
+        ele.click()  # 点击套餐下拉，进入弹窗选择
+        time.sleep(2)
+        ele = get_element(self.dr, appium_xpath, tcxz_xpath)
+        ele.click()  # 选择第二个套餐
+        time.sleep(2)
 
-        # 所以考虑使用xpath定位
-        # 因直接使用xpath定位不准，同事说需要从native的driver切换到webview；
-        # 但是执行如下代码切换的时候，始终是不成功的，搞了1天半；无果，暂时放弃。
-        # print self.dr.contexts  # 获取dirver类型，原生+H5的driver（将H5的driver给下面的值）
-        # self.dr.switch_to.context('WEBVIEW_chrome')
-        # ele = get_element(self.dr, appium_xpath, gmbt_xpath)
-        # 最终还是使用了accessibility_id定位。
-        ele = get_element(self.dr, appium_accessibility, tc1_accessibility)
-        ele.click()
-        time.sleep(2)  # 这个sleep很关键(一点都不关键)，因为弹窗未加载完成需要一段时间。
-
-        # while True:
-        #     ele = get_element(self.dr, appium_accessibility, tc3_accessibility)
-        #     if not if_element_exist(self.dr, appium_accessibility, tc3_accessibility):
-        #         continue
-        #     else:
-        #         ele.click()
-        #         break
-
-        remove_kaka('screenshot', 'price')
-
+        # 下面进行截图操作
+        # self.dr.switch_to.context('NATIVE_APP')  # 这种方法十分不可取，还是使用webview的截图方法吧
+        time.sleep(2)
+        remove_kaka('\\screenshot', 'price')  # 首先清除之前的历史截图，名称含‘price’的全删。
         # windows下可使用如下写法-- 相对路径
         # 这种写法的相对路径，是从根目录向下找
-        self.dr.save_screenshot('screenshot\\price_bigPic1' + '.png')
+        img = self.dr.get_screenshot_as_base64()
+        imagedata = base64.b64decode(img)
+        print(imagedata)
+        test_file = open('screenshot\\base64' + '.png', "wb")
+        test_file.write(imagedata)
+        test_file.close()
+        print img
+        # self.dr.save_screenshot('screenshot\\price_bigPic1' + '.png')  # 截取第一张大图，直接截全屏
         time.sleep(2)
+        print 'the end'
 
-        # 截取第1张图片
-        ele = get_element(self.dr, appium_accessibility, tczj_accessibility)
+        '''
+        ele = get_element(self.dr, appium_accessibility, price1_xpath)  # 截取第1张小图，指定位置截取
         patial_screenshot(ele, "price_bigPic1", "price_smallPic1")
         time.sleep(5)
+
         # 确认后关闭弹窗，进入购买页面
-        ele = get_element(self.dr, appium_accessibility, qrbt_accessibility)
-        ele.click()
+        ele = get_element(self.dr, appium_xpath, qrbt_xpath)
+        ele.click()  # 点击确认按钮
+
+        self.dr.save_screenshot('screenshot\\price_bigPic2' + '.png')  # 截取第二张大图，直接截全屏
         time.sleep(2)
 
-        # 获取全屏截图
-        self.dr.save_screenshot('screenshot\\price_bigPic2' + '.png')
-        time.sleep(2)
-
-        # 截取第2张图片
-        ele = get_element(self.dr, appium_accessibility, tcjg_accessibility)
+        ele = get_element(self.dr, appium_accessibility, price2_xpath)  # 截取第2张小图，指定位置截取
         patial_screenshot(ele, "price_bigPic2", "price_smallPic2")
         time.sleep(5)
 
@@ -100,15 +92,16 @@ class Purchase(unittest.TestCase):
         hanming_distance = classify_pHash('price_smallPic1', 'price_smallPic2')  #pHash的结果是(64, 0)
         print hanming_distance
 
-        ele = get_element(self.dr, appium_accessibility, qrgm_accessibility)
+        ele = get_element(self.dr, appium_accessibility, qrgm_xpath)  # 确认购买按钮
         ele.click()
-
-        ele = get_element(self.dr, appium_accessibility, fwxy_accessibility)
-        ele.click()
-        print self.dr.contexts
-
         time.sleep(5)
 
+        ele = get_element(self.dr, appium_accessibility, fwxy_xpath)  # 服务协议
+        ele.click()
+
+        print self.dr.contexts
+        time.sleep(5)
+        '''
 
 def purchaseSuit():
     suit = unittest.TestSuite()
